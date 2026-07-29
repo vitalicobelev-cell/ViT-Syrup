@@ -99,7 +99,7 @@ const DATA=[
 
             volume:0.7,
 
-            tare:0
+            tare:498
 
         }
 
@@ -126,7 +126,7 @@ const DATA=[
 
             volume:0.7,
 
-            tare:0
+            tare:464
 
         },
 
@@ -136,7 +136,7 @@ const DATA=[
 
             volume:1,
 
-            tare:0
+            tare:532
 
         },
 
@@ -146,7 +146,7 @@ const DATA=[
 
             volume:1,
 
-            tare:0
+            tare:75
 
         }
 
@@ -172,7 +172,7 @@ const DATA=[
 
             volume:0.7,
 
-            tare:0
+            tare:454
 
         }
 
@@ -199,7 +199,7 @@ const DATA=[
 
             volume:1,
 
-            tare:0
+            tare:463
 
         }
 
