@@ -267,12 +267,19 @@ function calculate() {
 
     let kg = parseFloat(text);
 
-    if (isNaN(kg)) {
+    if (weight.value.trim() === "") {
 
-        result.textContent = "Ошибка";
-        return;
+    result.textContent = "0,000";
+    return;
 
-    }
+}
+
+if (isNaN(kg)) {
+
+    result.textContent = "Ошибка";
+    return;
+
+}
 
     /* -----------------------------------------
        Переводим кг → граммы
@@ -371,7 +378,7 @@ updateScreen();
 
 weight.value = "";
 
-result.textContent = "Ошибка";
+result.textContent = "0,000";
 
 
 /* =========================================================
