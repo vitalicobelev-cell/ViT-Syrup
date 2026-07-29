@@ -223,3 +223,34 @@ font-size:54px;
 }
 
 }
+
+.result-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+}
+
+.copy-mini{
+
+    width:42px;
+    height:42px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#36435b;
+    color:white;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.copy-mini:active{
+
+    transform:scale(.92);
+
+}
