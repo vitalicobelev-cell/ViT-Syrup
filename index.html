@@ -696,6 +696,185 @@ let bottleIndex=0;
 let pumpIndex=0;
 
 </script>
+
+<script>
+
+/* ==========================================================
+                    ПОИСК ЭЛЕМЕНТОВ
+========================================================== */
+
+const companyName=document.getElementById("companyName");
+const bottleName=document.getElementById("bottleName");
+const pumpName=document.getElementById("pumpName");
+
+const note=document.getElementById("note");
+
+const weight=document.getElementById("weight");
+
+const result=document.getElementById("result");
+
+const check=document.getElementById("check");
+
+
+/* ==========================================================
+                  ТЕКУЩИЕ ОБЪЕКТЫ
+
+Чтобы не писать длинные строки.
+
+========================================================== */
+
+function currentCompany(){
+
+    return DATA[companyIndex];
+
+}
+
+function currentBottle(){
+
+    return DATA[companyIndex].bottles[bottleIndex];
+
+}
+
+function currentPump(){
+
+    return PUMPS[pumpIndex];
+
+}
+
+
+/* ==========================================================
+                 ОБНОВЛЕНИЕ ЭКРАНА
+
+Вызывается после любого изменения.
+
+========================================================== */
+
+function updateScreen(){
+
+    companyName.textContent=currentCompany().company;
+
+    bottleName.textContent=currentBottle().name;
+
+    pumpName.textContent=currentPump().name;
+
+    note.textContent=currentCompany().note;
+
+    calculate();
+
+}
+
+
+/* ==========================================================
+                 СТРЕЛКИ ФИРМЫ
+
+При смене фирмы автоматически
+переходим на первую бутылку.
+
+========================================================== */
+
+companyPrev.onclick=function(){
+
+    companyIndex--;
+
+    if(companyIndex<0){
+
+        companyIndex=DATA.length-1;
+
+    }
+
+    bottleIndex=0;
+
+    updateScreen();
+
+};
+
+
+companyNext.onclick=function(){
+
+    companyIndex++;
+
+    if(companyIndex>=DATA.length){
+
+        companyIndex=0;
+
+    }
+
+    bottleIndex=0;
+
+    updateScreen();
+
+};
+
+
+/* ==========================================================
+                 СТРЕЛКИ ТАРЫ
+========================================================== */
+
+bottlePrev.onclick=function(){
+
+    bottleIndex--;
+
+    if(bottleIndex<0){
+
+        bottleIndex=currentCompany().bottles.length-1;
+
+    }
+
+    updateScreen();
+
+};
+
+
+bottleNext.onclick=function(){
+
+    bottleIndex++;
+
+    if(bottleIndex>=currentCompany().bottles.length){
+
+        bottleIndex=0;
+
+    }
+
+    updateScreen();
+
+};
+
+
+/* ==========================================================
+                 СТРЕЛКИ ПОМПЫ
+========================================================== */
+
+pumpPrev.onclick=function(){
+
+    pumpIndex--;
+
+    if(pumpIndex<0){
+
+        pumpIndex=PUMPS.length-1;
+
+    }
+
+    updateScreen();
+
+};
+
+
+pumpNext.onclick=function(){
+
+    pumpIndex++;
+
+    if(pumpIndex>=PUMPS.length){
+
+        pumpIndex=0;
+
+    }
+
+    updateScreen();
+
+};
+
+</script>
+  
 </body>
 
 </html>
