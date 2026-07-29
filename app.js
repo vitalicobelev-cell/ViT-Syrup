@@ -1,9 +1,12 @@
 /* =========================================================
    ViT-Syrup v2.0
-
    app.js
 
    Вся логика приложения.
+
+   Формула:
+
+   (Вес × 1000 − Тара − Помпа) / 770
 
 ========================================================= */
 
@@ -24,39 +27,36 @@ const result = document.getElementById("result");
 
 const copyMark = document.getElementById("copyMark");
 
+const bottlePrev = document.getElementById("bottlePrev");
+const bottleNext = document.getElementById("bottleNext");
+
 
 /* =========================================================
-   СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-
-   Индексы текущего выбора.
-
+   ТЕКУЩИЙ ВЫБОР
 ========================================================= */
 
 let companyIndex = 0;
-
 let bottleIndex = 0;
-
 let pumpIndex = 0;
 
 
 /* =========================================================
-   ТЕКУЩИЕ ДАННЫЕ
-
+   БЫСТРЫЙ ДОСТУП К ДАННЫМ
 ========================================================= */
 
-function currentCompany(){
+function currentCompany() {
 
     return DATA[companyIndex];
 
 }
 
-function currentBottle(){
+function currentBottle() {
 
     return DATA[companyIndex].bottles[bottleIndex];
 
 }
 
-function currentPump(){
+function currentPump() {
 
     return PUMPS[pumpIndex];
 
@@ -65,38 +65,43 @@ function currentPump(){
 
 /* =========================================================
    ОБНОВЛЕНИЕ ЭКРАНА
-
-   Вызывается после любого изменения.
-
 ========================================================= */
 
-function updateScreen(){
+function updateScreen() {
 
     const company = currentCompany();
-
     const bottle = currentBottle();
-
     const pump = currentPump();
 
     companyName.textContent = company.company;
-
     bottleName.textContent = bottle.name;
-
     pumpName.textContent = pump.name;
-
     note.textContent = company.note;
 
     /* -----------------------------------------
-       Минимальный допустимый вес
-
-       Используется как подсказка
-       в поле ввода.
-
+       Минимальный вес
     ----------------------------------------- */
 
     const minWeight = bottle.tare + pump.weight;
 
     weight.placeholder = "от " + minWeight + " г";
+
+    /* -----------------------------------------
+       Если бутылка одна —
+       стрелки скрываем
+    ----------------------------------------- */
+
+    if (company.bottles.length === 1) {
+
+        bottlePrev.style.visibility = "hidden";
+        bottleNext.style.visibility = "hidden";
+
+    } else {
+
+        bottlePrev.style.visibility = "visible";
+        bottleNext.style.visibility = "visible";
+
+    }
 
 }
 
@@ -105,17 +110,17 @@ function updateScreen(){
    ПЕРЕКЛЮЧЕНИЕ ФИРМЫ
 ========================================================= */
 
-document.getElementById("companyPrev").onclick=function(){
+document.getElementById("companyPrev").onclick = function () {
 
     companyIndex--;
 
-    if(companyIndex<0){
+    if (companyIndex < 0) {
 
-        companyIndex=DATA.length-1;
+        companyIndex = DATA.length - 1;
 
     }
 
-    bottleIndex=0;
+    bottleIndex = 0;
 
     updateScreen();
 
@@ -124,18 +129,17 @@ document.getElementById("companyPrev").onclick=function(){
 };
 
 
-
-document.getElementById("companyNext").onclick=function(){
+document.getElementById("companyNext").onclick = function () {
 
     companyIndex++;
 
-    if(companyIndex>=DATA.length){
+    if (companyIndex >= DATA.length) {
 
-        companyIndex=0;
+        companyIndex = 0;
 
     }
 
-    bottleIndex=0;
+    bottleIndex = 0;
 
     updateScreen();
 
@@ -148,13 +152,13 @@ document.getElementById("companyNext").onclick=function(){
    ПЕРЕКЛЮЧЕНИЕ БУТЫЛКИ
 ========================================================= */
 
-document.getElementById("bottlePrev").onclick=function(){
+document.getElementById("bottlePrev").onclick = function () {
 
     bottleIndex--;
 
-    if(bottleIndex<0){
+    if (bottleIndex < 0) {
 
-        bottleIndex=currentCompany().bottles.length-1;
+        bottleIndex = currentCompany().bottles.length - 1;
 
     }
 
@@ -165,14 +169,13 @@ document.getElementById("bottlePrev").onclick=function(){
 };
 
 
-
-document.getElementById("bottleNext").onclick=function(){
+document.getElementById("bottleNext").onclick = function () {
 
     bottleIndex++;
 
-    if(bottleIndex>=currentCompany().bottles.length){
+    if (bottleIndex >= currentCompany().bottles.length) {
 
-        bottleIndex=0;
+        bottleIndex = 0;
 
     }
 
@@ -187,13 +190,13 @@ document.getElementById("bottleNext").onclick=function(){
    ПЕРЕКЛЮЧЕНИЕ ПОМПЫ
 ========================================================= */
 
-document.getElementById("pumpPrev").onclick=function(){
+document.getElementById("pumpPrev").onclick = function () {
 
     pumpIndex--;
 
-    if(pumpIndex<0){
+    if (pumpIndex < 0) {
 
-        pumpIndex=PUMPS.length-1;
+        pumpIndex = PUMPS.length - 1;
 
     }
 
@@ -204,14 +207,13 @@ document.getElementById("pumpPrev").onclick=function(){
 };
 
 
-
-document.getElementById("pumpNext").onclick=function(){
+document.getElementById("pumpNext").onclick = function () {
 
     pumpIndex++;
 
-    if(pumpIndex>=PUMPS.length){
+    if (pumpIndex >= PUMPS.length) {
 
-        pumpIndex=0;
+        pumpIndex = 0;
 
     }
 
@@ -221,35 +223,22 @@ document.getElementById("pumpNext").onclick=function(){
 
 };
 
-
-
 /* =========================================================
-   АВТООЧИСТКА ПОЛЯ ВВОДА
-
-   Если в поле уже есть число,
-   при нажатии оно сразу очищается.
-
+   ОЧИСТКА ПОЛЯ ПРИ НАЖАТИИ
 ========================================================= */
 
-weight.addEventListener("focus",function(){
+weight.addEventListener("focus", function () {
 
-    if(weight.value!==""){
-
-        weight.value="";
-
-    }
+    weight.value = "";
 
 });
 
 
-
 /* =========================================================
    ПЕРЕСЧЁТ ПРИ ВВОДЕ
-
 ========================================================= */
 
-weight.addEventListener("input",calculate);
-
+weight.addEventListener("input", calculate);
 
 
 /* =========================================================
@@ -257,49 +246,78 @@ weight.addEventListener("input",calculate);
 
    Формула:
 
-   (Вес − Тара − Помпа) / Плотность
+   (Вес × 1000 − Тара − Помпа) / 770
 
+   Вес вводится в килограммах.
 ========================================================= */
 
-function calculate(){
+function calculate() {
 
-    const bottle=currentBottle();
+    const bottle = currentBottle();
+    const pump = currentPump();
 
-    const pump=currentPump();
+    /* -----------------------------------------
+       Получаем введённое значение
 
-    const value=parseFloat(weight.value);
+       Разрешаем ввод и через точку,
+       и через запятую.
+    ----------------------------------------- */
 
+    let text = weight.value.replace(",", ".");
 
+    let kg = parseFloat(text);
 
-    if(isNaN(value)){
+    if (isNaN(kg)) {
 
-        result.textContent="Ошибка";
-
+        result.textContent = "Ошибка";
         return;
 
     }
 
+    /* -----------------------------------------
+       Переводим кг → граммы
+    ----------------------------------------- */
 
+    const grams = kg * 1000;
 
-    const minWeight=bottle.tare+pump.weight;
+    /* -----------------------------------------
+       Минимально возможный вес
+    ----------------------------------------- */
 
+    const minWeight = bottle.tare + pump.weight;
 
+    if (grams < minWeight) {
 
-    if(value<minWeight){
-
-        result.textContent="Ошибка";
-
+        result.textContent = "Ошибка";
         return;
 
     }
 
+    /* -----------------------------------------
+       Основная формула
+    ----------------------------------------- */
 
+    let volume =
+        (grams - bottle.tare - pump.weight)
+        / SETTINGS.density;
 
-    let volume=(value-bottle.tare-pump.weight)/SETTINGS.density;
+    /* -----------------------------------------
+       Защита от отрицательных значений
+    ----------------------------------------- */
 
+    if (volume < 0) {
 
+        result.textContent = "Ошибка";
+        return;
 
-    result.textContent=volume.toFixed(SETTINGS.decimals);
+    }
+
+    /* -----------------------------------------
+       Вывод результата
+    ----------------------------------------- */
+
+    result.textContent =
+        volume.toFixed(SETTINGS.decimals);
 
 }
 
@@ -308,36 +326,33 @@ function calculate(){
    КОПИРОВАНИЕ РЕЗУЛЬТАТА
 
    Копируется только число.
-
 ========================================================= */
 
-result.addEventListener("click",async function(){
+result.addEventListener("click", async function () {
 
-    if(result.textContent==="Ошибка"){
+    if (result.textContent === "Ошибка") {
 
         return;
 
     }
 
-    try{
+    try {
 
         await navigator.clipboard.writeText(result.textContent);
 
         result.classList.add("copied");
-
         copyMark.classList.add("show");
 
-        setTimeout(function(){
+        setTimeout(function () {
 
             result.classList.remove("copied");
-
             copyMark.classList.remove("show");
 
-        },700);
+        }, 700);
 
     }
 
-    catch(error){
+    catch (error) {
 
         console.log(error);
 
@@ -346,39 +361,8 @@ result.addEventListener("click",async function(){
 });
 
 
-
-/* =========================================================
-   ЗАПРЕТ ОТРИЦАТЕЛЬНЫХ ЗНАЧЕНИЙ
-
-   Если по какой-либо причине
-   получилось отрицательное число,
-   выводим "Ошибка".
-
-========================================================= */
-
-function validateResult(volume){
-
-    if(volume<0){
-
-        return null;
-
-    }
-
-    return volume;
-
-}
-
 /* =========================================================
    ПЕРВЫЙ ЗАПУСК
-
-   При открытии приложения:
-
-   • загружается первая фирма
-   • первая бутылка
-   • первая помпа
-   • рассчитывается минимальный вес
-   • очищается поле результата
-
 ========================================================= */
 
 updateScreen();
@@ -389,25 +373,23 @@ result.textContent = "Ошибка";
 
 
 /* =========================================================
-   ГОТОВО
-
-   ViT-Syrup v2.0
+   КОНЕЦ ФАЙЛА
 
    Если потребуется изменить:
 
-   • внешний вид
-       style.css
+   • Формулу
+       calculate()
 
-   • бутылки
-       data.js
+   • Копирование
+       result.click()
 
-   • формулу
-       app.js
+   • Переключение фирм
+       companyPrev / companyNext
 
-   • расположение элементов
-       index.html
+   • Переключение бутылок
+       bottlePrev / bottleNext
+
+   • Переключение помпы
+       pumpPrev / pumpNext
 
 ========================================================= */
-
-
-
