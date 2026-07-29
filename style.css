@@ -1,256 +1,372 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* =========================================================
+   ViT-Syrup v2.0
 
-:root {
-    --bg: #0f172a;
-    --card: #1e293b;
-    --card2: #334155;
-    --text: #f8fafc;
-    --sub: #94a3b8;
-    --accent: #2563eb;
-    --green: #22c55e;
-}
+   style.css
 
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-    min-height: 100vh;
-}
+   Здесь находится весь внешний вид приложения.
 
-.container {
-    max-width: 520px;
-    margin: auto;
-    padding: 18px;
-}
+   Если нужно изменить:
+   - цвета
+   - размеры
+   - отступы
+   - шрифты
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-}
+   Всё меняется только здесь.
+========================================================= */
 
-h1 {
-    font-size: 32px;
-    font-weight: 700;
-}
 
-#settingsBtn {
-    width: 46px;
-    height: 46px;
-    border: none;
-    border-radius: 14px;
-    background: var(--card);
-    color: white;
-    font-size: 20px;
-}
+/* =========================================================
+   ОБЩИЕ НАСТРОЙКИ
+========================================================= */
 
-.card {
-    background: var(--card);
-    border-radius: 22px;
-    padding: 18px;
-    margin-bottom: 16px;
-}
+*{
 
-.label {
-    color: var(--sub);
-    font-size: 14px;
-    margin-bottom: 12px;
-}
+    margin:0;
 
-.selector {
+    padding:0;
 
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 14px;
+    box-sizing:border-box;
 
 }
 
-.selector button {
 
-    width: 52px;
+body{
 
-    height: 52px;
+    background:#1d2330;
 
-    border: none;
+    color:#ffffff;
 
-    border-radius: 16px;
-
-    background: var(--card2);
-
-    color: white;
-
-    font-size: 22px;
-
-    font-weight: bold;
+    font-family:Arial, Helvetica, sans-serif;
 
 }
 
-.selector div {
 
-    flex: 1;
-
-    text-align: center;
-
-    font-size: 24px;
-
-    font-weight: 700;
-
-}
-
-#note {
-
-    text-align: center;
-
-    font-size: 20px;
-
-    color: white;
-
-    min-height: 24px;
-
-}
-
-input {
-
-    width: 100%;
-
-    height: 68px;
-
-    border: none;
-
-    border-radius: 18px;
-
-    background: var(--card2);
-
-    color: white;
-
-    text-align: center;
-
-    font-size: 36px;
-
-    outline: none;
-
-}
-
-input::placeholder {
-
-    color: #64748b;
-
-}
-
-.resultCard {
-
-    text-align: center;
-
-}
-
-#result {
-
-    font-size: 62px;
-
-    font-weight: bold;
-
-    color: var(--green);
-
-}
-
-#copyBtn {
-
-    width: 10%;
-
-    height: 64px;
-
-    border: none;
-
-    border-radius: 20px;
-
-    background: var(--accent);
-
-    color: white;
-
-    font-size: 22px;
-
-    font-weight: 700;
-
-}
-
-button {
-
-    cursor: pointer;
-
-    transition: .15s;
-
-}
-
-button:active {
-
-    transform: scale(.97);
-
-}
-
-@media (max-width:480px){
-
-.container{
-
-padding:14px;
-
-}
-
-h1{
-
-font-size:28px;
-
-}
-
-.selector div{
-
-font-size:22px;
-
-}
-
-#result{
-
-font-size:54px;
-
-}
-
-}
-
-.result-row{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:16px;
-}
-
-.copy-mini{
+#app{
 
     width:100%;
-    height:32px;
+
+    max-width:420px;
+
+    margin:auto;
+
+    padding:18px;
+
+}
+
+
+/* =========================================================
+   ЛОГОТИП
+========================================================= */
+
+#logo{
+
+    text-align:center;
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    color:#6EB8FF;
+
+    margin-bottom:24px;
+
+}
+
+
+/* =========================================================
+   ОБЩИЕ КАРТОЧКИ
+========================================================= */
+
+.selector{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    background:#2b3447;
+
+    border-radius:16px;
+
+    height:58px;
+
+    margin-bottom:12px;
+
+}
+
+
+/* =========================================================
+   КНОПКИ ◀ ▶
+========================================================= */
+
+.selector button{
+
+    width:54px;
+
+    height:54px;
 
     border:none;
-    border-radius:12px;
 
-    background:#36435b;
+    background:transparent;
+
     color:white;
 
-    font-size:16px;
+    font-size:22px;
 
     cursor:pointer;
 
-    transition:.2s;
+    transition:.15s;
+
 }
 
-.copy-mini:active{
+
+.selector button:active{
 
     transform:scale(.92);
 
 }
+
+
+/* =========================================================
+   ЦЕНТРАЛЬНЫЙ ТЕКСТ
+========================================================= */
+
+.selector div{
+
+    flex:1;
+
+    text-align:center;
+
+    font-size:20px;
+
+    font-weight:600;
+
+}
+/* =========================================================
+   ПРИМЕЧАНИЕ
+========================================================= */
+
+#note{
+
+    height:28px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:16px;
+
+    color:#8fb7ff;
+
+    margin-bottom:14px;
+
+}
+
+
+/* =========================================================
+   ПОДПИСИ
+========================================================= */
+
+.caption{
+
+    font-size:14px;
+
+    color:#9aa8bd;
+
+    margin-bottom:6px;
+
+    margin-left:4px;
+
+}
+
+
+/* =========================================================
+   ПОЛЕ ВВОДА
+========================================================= */
+
+#weight{
+
+    width:100%;
+
+    height:58px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:16px;
+
+    background:#2b3447;
+
+    color:#ffffff;
+
+    font-size:28px;
+
+    text-align:center;
+
+    margin-bottom:18px;
+
+}
+
+
+#weight::placeholder{
+
+    color:#7f8ca3;
+
+}
+
+
+/* =========================================================
+   БЛОК РЕЗУЛЬТАТА
+========================================================= */
+
+#resultBox{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:100%;
+
+    height:58px;
+
+    border-radius:16px;
+
+    background:#2b3447;
+
+}
+
+
+/* =========================================================
+   ТЕКСТ РЕЗУЛЬТАТА
+========================================================= */
+
+#result{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#6EB8FF;
+
+    user-select:none;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+/* =========================================================
+   ГАЛОЧКА КОПИРОВАНИЯ
+
+   Появляется после успешного копирования.
+========================================================= */
+
+#copyMark{
+
+    position:absolute;
+
+    right:18px;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    color:#2ECC71;
+
+    opacity:0;
+
+    transition:.25s;
+
+}
+
+
+/* =========================================================
+   СОСТОЯНИЕ ПОСЛЕ КОПИРОВАНИЯ
+========================================================= */
+
+#result.copied{
+
+    color:#2ECC71;
+
+}
+
+
+#copyMark.show{
+
+    opacity:1;
+
+}
+
+
+/* =========================================================
+   АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНА
+========================================================= */
+
+@media (max-width:420px){
+
+    #app{
+
+        padding:14px;
+
+    }
+
+    #logo{
+
+        font-size:28px;
+
+    }
+
+    .selector{
+
+        height:56px;
+
+    }
+
+    .selector div{
+
+        font-size:18px;
+
+    }
+
+    #weight{
+
+        font-size:26px;
+
+    }
+
+    #result{
+
+        font-size:28px;
+
+    }
+
+}
+
+
+/* =========================================================
+   КОНЕЦ style.css
+
+   Если захочешь изменить внешний вид приложения,
+   почти всё находится именно в этом файле.
+
+   Самые полезные места:
+
+   #logo          — логотип
+   .selector      — карточки
+   #weight        — поле ввода
+   #resultBox     — блок результата
+   #result        — текст результата
+
+========================================================= */
+
+
+
+
