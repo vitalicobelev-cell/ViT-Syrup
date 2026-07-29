@@ -1,344 +1,413 @@
-// ===============================
-// ViT-Syrup v1.0
-// Часть 1
-// ===============================
+/* =========================================================
+   ViT-Syrup v2.0
 
-// ---------- Элементы ----------
+   app.js
 
-const brandName = document.getElementById("brandName");
-const materialName = document.getElementById("materialName");
-const volumeName = document.getElementById("volumeName");
+   Вся логика приложения.
+
+========================================================= */
+
+
+/* =========================================================
+   ПОЛУЧЕНИЕ ЭЛЕМЕНТОВ
+========================================================= */
+
+const companyName = document.getElementById("companyName");
+const bottleName = document.getElementById("bottleName");
 const pumpName = document.getElementById("pumpName");
 
 const note = document.getElementById("note");
+
 const weight = document.getElementById("weight");
+
 const result = document.getElementById("result");
 
-const materialCard = document.getElementById("materialCard");
-const volumeCard = document.getElementById("volumeCard");
+const copyMark = document.getElementById("copyMark");
 
 
-// ---------- Индексы ----------
+/* =========================================================
+   СОСТОЯНИЕ ПРИЛОЖЕНИЯ
 
-let brandIndex = 0;
-let materialIndex = 0;
+   Индексы текущего выбора.
+
+========================================================= */
+
+let companyIndex = 0;
+
 let bottleIndex = 0;
+
 let pumpIndex = 0;
 
 
-// ---------- Сохранение ----------
+/* =========================================================
+   ТЕКУЩИЕ ДАННЫЕ
 
-const SAVE_KEY = "vit-syrup-state";
+========================================================= */
 
-function saveState() {
+function currentCompany(){
 
-    localStorage.setItem(SAVE_KEY, JSON.stringify({
-
-        brandIndex,
-        materialIndex,
-        bottleIndex,
-        pumpIndex
-
-    }));
+    return DATA[companyIndex];
 
 }
 
-function loadState() {
+function currentBottle(){
 
-    const saved = localStorage.getItem(SAVE_KEY);
+    return DATA[companyIndex].bottles[bottleIndex];
 
-    if (!saved) return;
+}
 
-    try {
+function currentPump(){
 
-        const state = JSON.parse(saved);
+    return PUMPS[pumpIndex];
 
-        brandIndex = state.brandIndex ?? 0;
-        materialIndex = state.materialIndex ?? 0;
-        bottleIndex = state.bottleIndex ?? 0;
-        pumpIndex = state.pumpIndex ?? 0;
+}
+
+
+/* =========================================================
+   ОБНОВЛЕНИЕ ЭКРАНА
+
+   Вызывается после любого изменения.
+
+========================================================= */
+
+function updateScreen(){
+
+    const company = currentCompany();
+
+    const bottle = currentBottle();
+
+    const pump = currentPump();
+
+    companyName.textContent = company.company;
+
+    bottleName.textContent = bottle.name;
+
+    pumpName.textContent = pump.name;
+
+    note.textContent = company.note;
+
+    /* -----------------------------------------
+       Минимальный допустимый вес
+
+       Используется как подсказка
+       в поле ввода.
+
+    ----------------------------------------- */
+
+    const minWeight = bottle.tare + pump.weight;
+
+    weight.placeholder = "от " + minWeight + " г";
+
+}
+
+
+/* =========================================================
+   ПЕРЕКЛЮЧЕНИЕ ФИРМЫ
+========================================================= */
+
+document.getElementById("companyPrev").onclick=function(){
+
+    companyIndex--;
+
+    if(companyIndex<0){
+
+        companyIndex=DATA.length-1;
 
     }
 
-    catch {
+    bottleIndex=0;
 
-        console.log("Не удалось загрузить состояние");
+    updateScreen();
 
-    }
-
-}
-
-// ---------- Быстрый доступ ----------
-
-function brand() {
-    return DATA[brandIndex];
-}
-
-function material() {
-    return brand().materials[materialIndex];
-}
-
-function bottle() {
-    return material().bottles[bottleIndex];
-}
-
-function pump() {
-    return SETTINGS.pumps[pumpIndex];
-}
-
-// ---------- Обновление экрана ----------
-
-function refreshScreen() {
-
-    brandName.textContent = brand().brand;
-
-    materialName.textContent = material().name;
-
-    volumeName.textContent = bottle().volume;
-
-    pumpName.textContent = pump().name;
-
-    note.textContent = bottle().note;
-
-    materialCard.style.display =
-        brand().materials.length > 1
-            ? "block"
-            : "none";
-
-    volumeCard.style.display =
-        material().bottles.length > 1
-            ? "block"
-            : "none";
-saveState();
     calculate();
 
-}
+};
 
-// ---------- Переключение фирмы ----------
 
-function nextBrand() {
 
-    brandIndex++;
+document.getElementById("companyNext").onclick=function(){
 
-    if (brandIndex >= DATA.length)
-        brandIndex = 0;
+    companyIndex++;
 
-    materialIndex = 0;
-    bottleIndex = 0;
+    if(companyIndex>=DATA.length){
 
-    refreshScreen();
+        companyIndex=0;
 
-}
+    }
 
-function prevBrand() {
+    bottleIndex=0;
 
-    brandIndex--;
+    updateScreen();
 
-    if (brandIndex < 0)
-        brandIndex = DATA.length - 1;
+    calculate();
 
-    materialIndex = 0;
-    bottleIndex = 0;
+};
 
-    refreshScreen();
 
-}
+/* =========================================================
+   ПЕРЕКЛЮЧЕНИЕ БУТЫЛКИ
+========================================================= */
 
-// ---------- Переключение материала ----------
-
-function nextMaterial() {
-
-    materialIndex++;
-
-    if (materialIndex >= brand().materials.length)
-        materialIndex = 0;
-
-    bottleIndex = 0;
-
-    refreshScreen();
-
-}
-
-function prevMaterial() {
-
-    materialIndex--;
-
-    if (materialIndex < 0)
-        materialIndex = brand().materials.length - 1;
-
-    bottleIndex = 0;
-
-    refreshScreen();
-
-}
-
-// ---------- Переключение объема ----------
-
-function nextBottle() {
-
-    bottleIndex++;
-
-    if (bottleIndex >= material().bottles.length)
-        bottleIndex = 0;
-
-    refreshScreen();
-
-}
-
-function prevBottle() {
+document.getElementById("bottlePrev").onclick=function(){
 
     bottleIndex--;
 
-    if (bottleIndex < 0)
-        bottleIndex = material().bottles.length - 1;
+    if(bottleIndex<0){
 
-    refreshScreen();
+        bottleIndex=currentCompany().bottles.length-1;
 
-}
+    }
 
-// ---------- Переключение помпы ----------
+    updateScreen();
 
-function nextPump() {
+    calculate();
 
-    pumpIndex++;
+};
 
-    if (pumpIndex >= SETTINGS.pumps.length)
-        pumpIndex = 0;
 
-    refreshScreen();
 
-}
+document.getElementById("bottleNext").onclick=function(){
 
-function prevPump() {
+    bottleIndex++;
+
+    if(bottleIndex>=currentCompany().bottles.length){
+
+        bottleIndex=0;
+
+    }
+
+    updateScreen();
+
+    calculate();
+
+};
+
+
+/* =========================================================
+   ПЕРЕКЛЮЧЕНИЕ ПОМПЫ
+========================================================= */
+
+document.getElementById("pumpPrev").onclick=function(){
 
     pumpIndex--;
 
-    if (pumpIndex < 0)
-        pumpIndex = SETTINGS.pumps.length - 1;
+    if(pumpIndex<0){
 
-    refreshScreen();
-
-}
-
-// ===============================
-// ViT-Syrup v1.0
-// Часть 2
-// ===============================
-
-// ---------- Расчет ----------
-
-function calculate() {
-
-    let value = weight.value
-        .replace(",", ".");
-
-    value = parseFloat(value);
-
-    if (isNaN(value)) {
-
-        result.textContent = "0.000";
-        result.style.color = "#22c55e";
-
-        return;
-    }
-
-    let ml = (
-
-        value
-        - bottle().tare
-        - pump().weight
-
-    ) * SETTINGS.coefficient;
-
-    if (ml < 0) {
-
-        result.style.color = "#ef4444";
-        ml = 0;
-
-    } else {
-
-        result.style.color = "#22c55e";
+        pumpIndex=PUMPS.length-1;
 
     }
 
-    result.textContent = ml.toFixed(3);
+    updateScreen();
 
-}
+    calculate();
 
-// ---------- Автоматический пересчет ----------
+};
 
-weight.addEventListener("input", calculate);
 
-// ---------- ENTER ----------
 
-weight.addEventListener("keydown", function(e){
+document.getElementById("pumpNext").onclick=function(){
 
-    if(e.key === "Enter"){
+    pumpIndex++;
 
-        copyBtn.click();
+    if(pumpIndex>=PUMPS.length){
+
+        pumpIndex=0;
+
+    }
+
+    updateScreen();
+
+    calculate();
+
+};
+
+
+
+/* =========================================================
+   АВТООЧИСТКА ПОЛЯ ВВОДА
+
+   Если в поле уже есть число,
+   при нажатии оно сразу очищается.
+
+========================================================= */
+
+weight.addEventListener("focus",function(){
+
+    if(weight.value!==""){
+
+        weight.value="";
 
     }
 
 });
 
-// ---------- Обновление результата ----------
 
-refreshScreen();
-calculate();
 
-// ===============================
-// ViT-Syrup v1.0
-// Часть 3
-// ===============================
+/* =========================================================
+   ПЕРЕСЧЁТ ПРИ ВВОДЕ
 
-// ---------- Кнопки ----------
+========================================================= */
 
-document.getElementById("brandNext").onclick = nextBrand;
-document.getElementById("brandPrev").onclick = prevBrand;
+weight.addEventListener("input",calculate);
 
-document.getElementById("materialNext").onclick = nextMaterial;
-document.getElementById("materialPrev").onclick = prevMaterial;
 
-document.getElementById("volumeNext").onclick = nextBottle;
-document.getElementById("volumePrev").onclick = prevBottle;
 
-document.getElementById("pumpNext").onclick = nextPump;
-document.getElementById("pumpPrev").onclick = prevPump;
+/* =========================================================
+   РАСЧЁТ
 
-// ---------- Копирование ----------
+   Формула:
 
-copyBtn.onclick = async () => {
+   (Вес − Тара − Помпа) / Плотность
 
-    const text = result.textContent;
+========================================================= */
 
-    try{
+function calculate(){
 
-        await navigator.clipboard.writeText(text);
+    const bottle=currentBottle();
 
-        copyBtn.textContent = "✓";
+    const pump=currentPump();
 
-        setTimeout(()=>{
+    const value=parseFloat(weight.value);
 
-            copyBtn.textContent="📋";
 
-        },1000);
 
-    }catch(e){
+    if(isNaN(value)){
 
-        alert("Не удалось скопировать");
+        result.textContent="Ошибка";
+
+        return;
 
     }
 
-};
 
-// ---------- Запуск ----------
 
-loadState();
+    const minWeight=bottle.tare+pump.weight;
 
-refreshScreen();
 
-setTimeout(function(){
 
-    weight.focus();
+    if(value<minWeight){
 
-},300);
+        result.textContent="Ошибка";
+
+        return;
+
+    }
+
+
+
+    let volume=(value-bottle.tare-pump.weight)/SETTINGS.density;
+
+
+
+    result.textContent=volume.toFixed(SETTINGS.decimals);
+
+}
+
+
+/* =========================================================
+   КОПИРОВАНИЕ РЕЗУЛЬТАТА
+
+   Копируется только число.
+
+========================================================= */
+
+result.addEventListener("click",async function(){
+
+    if(result.textContent==="Ошибка"){
+
+        return;
+
+    }
+
+    try{
+
+        await navigator.clipboard.writeText(result.textContent);
+
+        result.classList.add("copied");
+
+        copyMark.classList.add("show");
+
+        setTimeout(function(){
+
+            result.classList.remove("copied");
+
+            copyMark.classList.remove("show");
+
+        },700);
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+    }
+
+});
+
+
+
+/* =========================================================
+   ЗАПРЕТ ОТРИЦАТЕЛЬНЫХ ЗНАЧЕНИЙ
+
+   Если по какой-либо причине
+   получилось отрицательное число,
+   выводим "Ошибка".
+
+========================================================= */
+
+function validateResult(volume){
+
+    if(volume<0){
+
+        return null;
+
+    }
+
+    return volume;
+
+}
+
+/* =========================================================
+   ПЕРВЫЙ ЗАПУСК
+
+   При открытии приложения:
+
+   • загружается первая фирма
+   • первая бутылка
+   • первая помпа
+   • рассчитывается минимальный вес
+   • очищается поле результата
+
+========================================================= */
+
+updateScreen();
+
+weight.value = "";
+
+result.textContent = "Ошибка";
+
+
+/* =========================================================
+   ГОТОВО
+
+   ViT-Syrup v2.0
+
+   Если потребуется изменить:
+
+   • внешний вид
+       style.css
+
+   • бутылки
+       data.js
+
+   • формулу
+       app.js
+
+   • расположение элементов
+       index.html
+
+========================================================= */
+
+
+
