@@ -317,7 +317,9 @@ function calculate() {
     ----------------------------------------- */
 
     result.textContent =
-        volume.toFixed(SETTINGS.decimals);
+    volume
+        .toFixed(SETTINGS.decimals)
+        .replace(".", ",");
 
 }
 
