@@ -1,192 +1,893 @@
 <!DOCTYPE html>
 <html lang="ru">
 
+<!--
+========================================================
+ViT-Syrup v1.0
+--------------------------------------------------------
+Автор идеи:
+Виталий
+
+Разработка:
+ChatGPT
+
+НАЗНАЧЕНИЕ
+----------
+Калькулятор ревизии сиропов.
+
+Работает полностью локально.
+Интернет не нужен.
+
+Файл состоит из:
+
+1. Настройки приложения
+2. Данные сиропов
+3. HTML
+4. CSS
+5. JavaScript
+
+Если спустя время понадобится изменить:
+
+Вес бутылок
+→ раздел "ДАННЫЕ"
+
+Формулу
+→ раздел "ФОРМУЛА"
+
+Внешний вид
+→ раздел "CSS"
+
+========================================================
+-->
+
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="UTF-8">
 
-    <title>ViT-Syrup</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+<title>ViT-Syrup</title>
+
+<style>
+
+/* =====================================================
+   CSS
+   Пока здесь только базовые настройки.
+   В следующей части полностью заменим этот раздел.
+===================================================== */
+
+/* =====================================================
+   ОБЩИЕ НАСТРОЙКИ
+
+   Здесь меняется внешний вид всего приложения.
+
+   Можно менять:
+   background
+   color
+   font-family
+
+===================================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    background:#1d2330;
+
+    color:white;
+
+    font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+}
+
+
+
+/* =====================================================
+   ОСНОВНОЙ КОНТЕЙНЕР
+
+   Ширину можно менять.
+
+===================================================== */
+
+#app{
+
+    max-width:420px;
+
+    margin:auto;
+
+    padding:15px;
+
+}
+
+
+
+
+/* =====================================================
+   ЛОГОТИП
+
+   Можно менять:
+   font-size
+   margin
+
+===================================================== */
+
+#logo{
+
+    text-align:center;
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    margin:20px 0;
+
+}
+
+
+
+
+/* =====================================================
+   ОБЩИЕ КАРТОЧКИ
+
+   Это фирма,
+   тара,
+   помпа.
+
+===================================================== */
+
+#companyCard,
+#bottleCard,
+#pumpCard{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    background:#2b3447;
+
+    border-radius:16px;
+
+    padding:12px;
+
+    margin-bottom:12px;
+
+}
+
+
+
+
+/* =====================================================
+   КНОПКИ ◀ ▶
+
+   Можно менять:
+
+   width
+   height
+   font-size
+   background
+
+===================================================== */
+
+button{
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#3d4b63;
+
+    color:white;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+button:active{
+
+    transform:scale(.95);
+
+}
+
+
+
+
+/* =====================================================
+   ТЕКСТ ВЫБОРА
+
+===================================================== */
+
+#companyName,
+#bottleName,
+#pumpName{
+
+    flex:1;
+
+    text-align:center;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+/* =====================================================
+   ПРИМЕЧАНИЕ
+
+===================================================== */
+
+#note{
+
+    text-align:center;
+
+    color:#9fc7ff;
+
+    min-height:24px;
+
+    margin-bottom:18px;
+
+}
+
+
+
+
+/* =====================================================
+   ЗАГОЛОВКИ
+
+===================================================== */
+
+.title{
+
+    margin-bottom:6px;
+
+    color:#8ea6c8;
+
+    font-size:15px;
+
+}
+
+
+
+
+/* =====================================================
+   ПОЛЕ ВВОДА
+
+   Можно менять:
+
+   высоту
+   размер шрифта
+
+===================================================== */
+
+#weight{
+
+    width:100%;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#2b3447;
+
+    color:white;
+
+    font-size:30px;
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+/* =====================================================
+   РЕЗУЛЬТАТ
+
+===================================================== */
+
+#resultBox{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+
+
+
+/* =====================================================
+   ЧИСЛО
+
+   При копировании
+   будет небольшая анимация.
+
+===================================================== */
+
+#result{
+
+    font-size:52px;
+
+    font-weight:bold;
+
+    color:#6eb8ff;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+
+
+
+/* =====================================================
+   ГАЛОЧКА
+
+===================================================== */
+
+#copied{
+
+    width:24px;
+
+    font-size:24px;
+
+    color:#2ecc71;
+
+    opacity:0;
+
+    transition:.25s;
+
+}
+
+
+
+
+/* =====================================================
+   АНИМАЦИЯ КОПИРОВАНИЯ
+
+   Лучше не менять.
+
+===================================================== */
+
+.resultCopied{
+
+    color:#2ecc71 !important;
+
+    transform:scale(1.08);
+
+}
+
+.showCheck{
+
+    opacity:1;
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-<div class="container">
-
-    <header>
-
-        <h1>🧋 ViT-Syrup</h1>
-
-        <button id="settingsBtn">
-            ⚙️
-        </button>
-
-    </header>
-
-
-    <!-- ФИРМА -->
-
-    <div class="card">
-
-    
-
-        <div class="selector">
-
-            <button id="brandPrev">◀</button>
-
-            <div id="brandName">
-                Monin
-            </div>
-
-            <button id="brandNext">▶</button>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- ТАРА -->
-
-    <div class="card" id="materialCard">
-
-       
-
-        <div class="selector">
-
-            <button id="materialPrev">◀</button>
-
-            <div id="materialName">
-                Стекло
-            </div>
-
-            <button id="materialNext">▶</button>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- ОБЪЕМ -->
-
-    <div class="card" id="volumeCard">
-
-    
-
-        <div class="selector">
-
-            <button id="volumePrev">◀</button>
-
-            <div id="volumeName">
-                1 л
-            </div>
-
-            <button id="volumeNext">▶</button>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- ПОМПА -->
-
-    <div class="card">
-
-    
-
-        <div class="selector">
-
-            <button id="pumpPrev">◀</button>
-
-            <div id="pumpName">
-                Без помпы
-            </div>
-
-            <button id="pumpNext">▶</button>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- ПРИМЕЧАНИЕ -->
-
-    <div class="card">
-
-        <div class="label">
-            Примечание
-        </div>
-
-        <div id="note">
-            —
-        </div>
-
-    </div>
-
-
-
-    <!-- ВВОД -->
-
-    <div class="card">
-
-        <div class="label">
-            Вес (гр)
-        </div>
-
-     <input
-    id="weight"
-    type="text"
-    inputmode="decimal"
-    autocomplete="off"
-    spellcheck="false"
-    placeholder="Например 1.268">
-    
-
-    </div>
-
-
-
-    <!-- РЕЗУЛЬТАТ -->
-
-    <div class="card result-card">
-
-    <div class="result-title">
-        Результат
-    </div>
-
-    <div class="result-row">
-
-        <div id="result" class="result-value">
-            0.000
-        </div>
-
-        <button id="copyBtn" class="copy-mini">
-            📋
-        </button>
-
-    </div>
+<!-- =====================================================
+     ЛОГОТИП
+     Можно менять текст.
+     Размер позже настроим стилями.
+===================================================== -->
+
+<div id="logo">
+
+🧋 ViT-Syrup
 
 </div>
 
 
 
-    <!-- КНОПКА -->
+<!-- =====================================================
+     ОСНОВНОЕ ПРИЛОЖЕНИЕ
+===================================================== -->
 
-    
+<div id="app">
+
+
+
+
+<!-- =====================================================
+     ВЫБОР ФИРМЫ
+===================================================== -->
+
+<div id="companyCard">
+
+<button id="companyPrev">
+
+◀
+
+</button>
+
+<div id="companyName">
+
+Rioba
+
+</div>
+
+<button id="companyNext">
+
+▶
+
+</button>
+
 </div>
 
 
 
-<script src="data.js"></script>
-<script src="app.js"></script>
 
+
+<!-- =====================================================
+     ВЫБОР ТАРЫ
+===================================================== -->
+
+<div id="bottleCard">
+
+<button id="bottlePrev">
+
+◀
+
+</button>
+
+<div id="bottleName">
+
+Стекло 0.7 л
+
+</div>
+
+<button id="bottleNext">
+
+▶
+
+</button>
+
+</div>
+
+
+
+
+
+<!-- =====================================================
+     ВЫБОР ПОМПЫ
+===================================================== -->
+
+<div id="pumpCard">
+
+<button id="pumpPrev">
+
+◀
+
+</button>
+
+<div id="pumpName">
+
+Без помпы
+
+</div>
+
+<button id="pumpNext">
+
+▶
+
+</button>
+
+</div>
+
+
+
+
+
+<!-- =====================================================
+     ПРИМЕЧАНИЕ
+
+     Если его нет,
+     место автоматически останется пустым.
+===================================================== -->
+
+<div id="note">
+
+Кокос
+
+</div>
+
+
+
+
+
+<!-- =====================================================
+     ПОЛЕ ВЕСА
+===================================================== -->
+
+<div class="title">
+
+Вес (гр)
+
+</div>
+
+<input
+
+id="weight"
+
+type="number"
+
+inputmode="decimal"
+
+placeholder="Введите вес"
+
+>
+
+
+
+
+
+<!-- =====================================================
+     РЕЗУЛЬТАТ
+
+     Это НЕ кнопка.
+
+     При нажатии на число
+     произойдет копирование.
+
+===================================================== -->
+
+<div class="title">
+
+Результат
+
+</div>
+
+<div id="resultBox">
+
+<span id="result">
+
+0.000
+
+</span>
+
+<span id="copied">
+
+</span>
+
+</div>
+
+</div>
+
+
+
+
+
+<!-- =====================================================
+     ДАННЫЕ
+
+     Пока минимальный набор.
+
+     Потом легко добавим остальные.
+===================================================== -->
+
+<script>
+
+const DATA = [
+
+{
+
+company:"Rioba",
+
+note:"Кокос",
+
+bottles:[
+
+{
+name:"Стекло 0.7 л",
+volume:0.7,
+tare:498
+},
+
+{
+name:"Стекло 1 л",
+volume:1,
+tare:640
+}
+
+]
+
+},
+
+{
+
+company:"Monin",
+
+note:"",
+
+bottles:[
+
+{
+name:"Стекло 0.7 л",
+volume:0.7,
+tare:510
+},
+
+{
+name:"Стекло 1 л",
+volume:1,
+tare:660
+}
+
+]
+
+}
+
+];
+
+
+
+
+
+/* =====================================================
+   ПОМПЫ
+
+   Вес указывается в граммах.
+
+   Если понадобится изменить,
+   менять только здесь.
+
+===================================================== */
+
+const PUMPS=[
+
+{
+
+name:"Без помпы",
+
+weight:0
+
+},
+
+{
+
+name:"Помпа",
+
+weight:30
+
+},
+
+{
+
+name:"Помпа 1883",
+
+weight:30
+
+}
+
+];
+
+</script>
+
+<!-- =====================================================
+     JavaScript
+     Будет добавлен
+     в следующих частях.
+===================================================== -->
+<script>
+
+/* =====================================================
+   СОСТОЯНИЕ ПРИЛОЖЕНИЯ
+
+   Здесь хранится текущий выбор пользователя.
+
+   Обычно этот блок менять не нужно.
+===================================================== */
+
+let companyIndex = 0;
+let bottleIndex = 0;
+let pumpIndex = 0;
+
+
+/* =====================================================
+   БЫСТРЫЙ ДОСТУП К ЭЛЕМЕНТАМ
+
+   Если изменишь id в HTML,
+   нужно изменить его и здесь.
+
+===================================================== */
+
+const companyName = document.getElementById("companyName");
+const bottleName = document.getElementById("bottleName");
+const pumpName = document.getElementById("pumpName");
+
+const note = document.getElementById("note");
+
+const weight = document.getElementById("weight");
+
+const result = document.getElementById("result");
+
+const copied = document.getElementById("copied");
+
+
+/* =====================================================
+   ОБНОВЛЕНИЕ ЭКРАНА
+
+   После любого изменения
+   вызывается эта функция.
+
+===================================================== */
+
+function updateScreen(){
+
+    const company = DATA[companyIndex];
+
+    const bottle = company.bottles[bottleIndex];
+
+    const pump = PUMPS[pumpIndex];
+
+    companyName.textContent = company.company;
+
+    bottleName.textContent = bottle.name;
+
+    pumpName.textContent = pump.name;
+
+    note.textContent = company.note;
+
+}
+
+
+/* =====================================================
+   СТРЕЛКИ ФИРМЫ
+
+===================================================== */
+
+document.getElementById("companyPrev").onclick = function(){
+
+    companyIndex--;
+
+    if(companyIndex < 0){
+
+        companyIndex = DATA.length - 1;
+
+    }
+
+    bottleIndex = 0;
+
+    updateScreen();
+
+};
+
+
+
+document.getElementById("companyNext").onclick = function(){
+
+    companyIndex++;
+
+    if(companyIndex >= DATA.length){
+
+        companyIndex = 0;
+
+    }
+
+    bottleIndex = 0;
+
+    updateScreen();
+
+};
+
+
+
+/* =====================================================
+   СТРЕЛКИ ТАРЫ
+
+===================================================== */
+
+document.getElementById("bottlePrev").onclick = function(){
+
+    bottleIndex--;
+
+    if(bottleIndex < 0){
+
+        bottleIndex = DATA[companyIndex].bottles.length-1;
+
+    }
+
+    updateScreen();
+
+};
+
+
+
+document.getElementById("bottleNext").onclick = function(){
+
+    bottleIndex++;
+
+    if(bottleIndex >= DATA[companyIndex].bottles.length){
+
+        bottleIndex = 0;
+
+    }
+
+    updateScreen();
+
+};
+
+
+
+/* =====================================================
+   СТРЕЛКИ ПОМПЫ
+
+===================================================== */
+
+document.getElementById("pumpPrev").onclick = function(){
+
+    pumpIndex--;
+
+    if(pumpIndex < 0){
+
+        pumpIndex = PUMPS.length-1;
+
+    }
+
+    updateScreen();
+
+};
+
+
+
+document.getElementById("pumpNext").onclick = function(){
+
+    pumpIndex++;
+
+    if(pumpIndex >= PUMPS.length){
+
+        pumpIndex = 0;
+
+    }
+
+    updateScreen();
+
+};
+
+
+/* =====================================================
+   ПЕРВЫЙ ЗАПУСК
+
+===================================================== */
+
+updateScreen();
+
+</script>
 </body>
 
 </html>
+
