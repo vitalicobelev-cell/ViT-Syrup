@@ -233,8 +233,8 @@ font-size:54px;
 
 .copy-mini{
 
-    width:1000px;
-    height:42px;
+    width:32px;
+    height:32px;
 
     border:none;
     border-radius:12px;
@@ -242,7 +242,7 @@ font-size:54px;
     background:#36435b;
     color:white;
 
-    font-size:20px;
+    font-size:16px;
 
     cursor:pointer;
 
