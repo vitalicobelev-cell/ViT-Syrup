@@ -17,7 +17,6 @@ const result = document.getElementById("result");
 const materialCard = document.getElementById("materialCard");
 const volumeCard = document.getElementById("volumeCard");
 
-const copyBtn = document.getElementById("copyBtn");
 
 // ---------- Индексы ----------
 
