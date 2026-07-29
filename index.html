@@ -874,6 +874,115 @@ pumpNext.onclick=function(){
 };
 
 </script>
+
+<script>
+
+/* ==========================================================
+                    ФОРМУЛА РАСЧЁТА
+
+Формула:
+
+(Вес - Тара - Помпа)
+× Коэффициент
+÷ (1000 × Объём)
+
+========================================================== */
+
+function calculate(){
+
+    const value=parseFloat(weight.value);
+
+    if(isNaN(value)){
+
+        result.textContent="0.000";
+
+        return;
+
+    }
+
+    const bottle=currentBottle();
+
+    const pump=currentPump();
+
+    const syrup=
+
+        (value-bottle.tare-pump.weight)
+
+        *SETTINGS.multiplier
+
+        /(1000*bottle.volume);
+
+    result.textContent=syrup.toFixed(SETTINGS.decimals);
+
+}
+
+
+/* ==========================================================
+                АВТООЧИСТКА ПОЛЯ
+
+При нажатии удаляет старое значение.
+
+========================================================== */
+
+weight.addEventListener("focus",function(){
+
+    if(weight.value!=""){
+
+        weight.value="";
+
+    }
+
+});
+
+
+/* ==========================================================
+              АВТОМАТИЧЕСКИЙ ПЕРЕСЧЁТ
+
+========================================================== */
+
+weight.addEventListener("input",calculate);
+
+
+/* ==========================================================
+                 КОПИРОВАНИЕ
+
+========================================================== */
+
+result.addEventListener("click",async function(){
+
+    try{
+
+        await navigator.clipboard.writeText(result.textContent);
+
+    }catch(e){
+
+        return;
+
+    }
+
+    result.classList.add("resultCopied");
+
+    check.classList.add("showCheck");
+
+    setTimeout(function(){
+
+        result.classList.remove("resultCopied");
+
+        check.classList.remove("showCheck");
+
+    },500);
+
+});
+
+
+/* ==========================================================
+                 ПЕРВЫЙ ЗАПУСК
+
+========================================================== */
+
+updateScreen();
+
+</script>
   
 </body>
 
