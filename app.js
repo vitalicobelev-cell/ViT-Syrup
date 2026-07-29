@@ -308,35 +308,27 @@ document.getElementById("pumpPrev").onclick = prevPump;
 
 // ---------- Копирование ----------
 
-copyBtn.onclick = async function () {
+copyBtn.onclick = async () => {
 
-    if (result.textContent === "0.000")
-        return;
+    const text = result.textContent;
 
-    try {
+    try{
 
-        await navigator.clipboard.writeText(result.textContent);
+        await navigator.clipboard.writeText(text);
 
-        copyBtn.textContent = "✅ Скопировано";
+        copyBtn.textContent = "✓";
 
-        setTimeout(function () {
+        setTimeout(()=>{
 
-            copyBtn.textContent = "📋 КОПИРОВАТЬ";
+            copyBtn.textContent="📋";
 
-        }, 900);
+        },1000);
 
-    } catch {
+    }catch(e){
 
-        alert("Не удалось скопировать.");
+        alert("Не удалось скопировать");
 
     }
-
-    weight.value = "";
-
-    result.textContent = "0.000";
-    result.style.color = "#22c55e";
-
-    weight.focus();
 
 };
 
