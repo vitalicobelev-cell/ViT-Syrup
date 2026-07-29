@@ -4,188 +4,178 @@
 <head>
 
     <meta charset="UTF-8">
+
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+          content="width=device-width, initial-scale=1.0">
 
     <title>ViT-Syrup</title>
 
+    <!-- Стили -->
     <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<div class="container">
+<div id="app">
 
-    <header>
+    <!-- ==========================================
+         ЛОГОТИП
+    =========================================== -->
 
-        <h1>🧋 ViT-Syrup</h1>
+    <div id="logo">
 
-        <button id="settingsBtn">
-            ⚙️
+        ViT-Syrup
+
+    </div>
+
+
+    <!-- ==========================================
+         ВЫБОР ФИРМЫ
+    =========================================== -->
+
+    <div class="selector" id="companyCard">
+
+        <button id="companyPrev">
+
+            ◀
+
         </button>
 
-    </header>
+        <div id="companyName">
 
-
-    <!-- ФИРМА -->
-
-    <div class="card">
-
-        <div class="label">
-            Фирма
-        </div>
-
-        <div class="selector">
-
-            <button id="brandPrev">◀</button>
-
-            <div id="brandName">
-                Monin
-            </div>
-
-            <button id="brandNext">▶</button>
+            Monin
 
         </div>
+
+        <button id="companyNext">
+
+            ▶
+
+        </button>
 
     </div>
 
 
+    <!-- ==========================================
+         ВЫБОР БУТЫЛКИ
+    =========================================== -->
 
-    <!-- ТАРА -->
+    <div class="selector" id="bottleCard">
 
-    <div class="card" id="materialCard">
+        <button id="bottlePrev">
 
-        <div class="label">
-            Тип тары
-        </div>
+            ◀
 
-        <div class="selector">
+        </button>
 
-            <button id="materialPrev">◀</button>
+        <div id="bottleName">
 
-            <div id="materialName">
-                Стекло
-            </div>
-
-            <button id="materialNext">▶</button>
+            Стекло 0.7 л
 
         </div>
+
+        <button id="bottleNext">
+
+            ▶
+
+        </button>
 
     </div>
 
 
+    <!-- ==========================================
+         ВЫБОР ПОМПЫ
+    =========================================== -->
 
-    <!-- ОБЪЕМ -->
+    <div class="selector" id="pumpCard">
 
-    <div class="card" id="volumeCard">
+        <button id="pumpPrev">
 
-        <div class="label">
-            Объем
-        </div>
+            ◀
 
-        <div class="selector">
+        </button>
 
-            <button id="volumePrev">◀</button>
+        <div id="pumpName">
 
-            <div id="volumeName">
-                1 л
-            </div>
-
-            <button id="volumeNext">▶</button>
+            Без помпы
 
         </div>
+
+        <button id="pumpNext">
+
+            ▶
+
+        </button>
 
     </div>
 
 
+    <!-- ==========================================
+         ПРИМЕЧАНИЕ
+    =========================================== -->
 
-    <!-- ПОМПА -->
-
-    <div class="card">
-
-        <div class="label">
-            Помпа
-        </div>
-
-        <div class="selector">
-
-            <button id="pumpPrev">◀</button>
-
-            <div id="pumpName">
-                Без помпы
-            </div>
-
-            <button id="pumpNext">▶</button>
-
-        </div>
+    <div id="note">
 
     </div>
 
 
+    <!-- ==========================================
+         ВЕС
+    =========================================== -->
 
-    <!-- ПРИМЕЧАНИЕ -->
+    <div class="caption">
 
-    <div class="card">
-
-        <div class="label">
-            Примечание
-        </div>
-
-        <div id="note">
-            —
-        </div>
+        Вес (гр)
 
     </div>
 
+    <input
+        id="weight"
+        type="number"
+        inputmode="decimal"
+        placeholder="от 499 г">
 
+        <!-- ==========================================
+         РЕЗУЛЬТАТ
+    =========================================== -->
 
-    <!-- ВВОД -->
+    <div class="caption">
 
-    <div class="card">
-
-        <div class="label">
-            Вес (л)
-        </div>
-
-     <input
-    id="weight"
-    type="text"
-    inputmode="decimal"
-    autocomplete="off"
-    spellcheck="false"
-    placeholder="Например 1.268">
-    
+        Остаток
 
     </div>
 
-
-
-    <!-- РЕЗУЛЬТАТ -->
-
-    <div class="card resultCard">
-
-        <div class="label">
-            Результат
-        </div>
+    <div id="resultBox">
 
         <div id="result">
-            0.000  <button id="copyBtn"> 📑  </button>
+
+            Ошибка
+
+        </div>
+
+        <div id="copyMark">
+
+            ✔
+
         </div>
 
     </div>
-
-
-
-    <!-- КНОПКА -->
-
-   
 
 </div>
 
 
+<!-- ==========================================
+     ДАННЫЕ
+========================================== -->
 
 <script src="data.js"></script>
+
+
+<!-- ==========================================
+     ЛОГИКА
+========================================== -->
+
 <script src="app.js"></script>
 
 </body>
