@@ -299,7 +299,7 @@ function calculate() {
 
     let volume =
         (grams - bottle.tare - pump.weight)
-        / SETTINGS.density;
+        / 1300;
 
     /* -----------------------------------------
        Защита от отрицательных значений
