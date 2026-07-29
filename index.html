@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <title>ViT-Syrup</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <h1>🧋 ViT-Syrup</h1>
+
+        <button id="settingsBtn">
+            ⚙️
+        </button>
+
+    </header>
+
+
+    <!-- ФИРМА -->
+
+    <div class="card">
+
+        <div class="label">
+            Фирма
+        </div>
+
+        <div class="selector">
+
+            <button id="brandPrev">◀</button>
+
+            <div id="brandName">
+                Monin
+            </div>
+
+            <button id="brandNext">▶</button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ТАРА -->
+
+    <div class="card" id="materialCard">
+
+        <div class="label">
+            Тип тары
+        </div>
+
+        <div class="selector">
+
+            <button id="materialPrev">◀</button>
+
+            <div id="materialName">
+                Стекло
+            </div>
+
+            <button id="materialNext">▶</button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ОБЪЕМ -->
+
+    <div class="card" id="volumeCard">
+
+        <div class="label">
+            Объем
+        </div>
+
+        <div class="selector">
+
+            <button id="volumePrev">◀</button>
+
+            <div id="volumeName">
+                1 л
+            </div>
+
+            <button id="volumeNext">▶</button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ПОМПА -->
+
+    <div class="card">
+
+        <div class="label">
+            Помпа
+        </div>
+
+        <div class="selector">
+
+            <button id="pumpPrev">◀</button>
+
+            <div id="pumpName">
+                Без помпы
+            </div>
+
+            <button id="pumpNext">▶</button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ПРИМЕЧАНИЕ -->
+
+    <div class="card">
+
+        <div class="label">
+            Примечание
+        </div>
+
+        <div id="note">
+            —
+        </div>
+
+    </div>
+
+
+
+    <!-- ВВОД -->
+
+    <div class="card">
+
+        <div class="label">
+            Вес (л)
+        </div>
+
+     <input
+    id="weight"
+    type="text"
+    inputmode="decimal"
+    autocomplete="off"
+    spellcheck="false"
+    placeholder="Например 1.268">
+    
+
+    </div>
+
+
+
+    <!-- РЕЗУЛЬТАТ -->
+
+    <div class="card resultCard">
+
+        <div class="label">
+            Результат
+        </div>
+
+        <div id="result">
+            0.000
+        </div>
+
+    </div>
+
+
+
+    <!-- КНОПКА -->
+
+    <button id="copyBtn">
+
+        📋 КОПИРОВАТЬ
+
+    </button>
+
+</div>
+
+
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+
+</html>
