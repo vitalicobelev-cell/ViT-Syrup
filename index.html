@@ -1,989 +1,197 @@
 <!DOCTYPE html>
 <html lang="ru">
 
-<!--
-==========================================================
-                 ViT-Syrup v2.0
-==========================================================
-
-Автор идеи:
-Виталий
-
-Разработка:
-ChatGPT
-
-Назначение:
-Калькулятор ревизии сиропов.
-
-Работает полностью офлайн.
-Состоит из одного файла.
-
-----------------------------------------------------------
-Структура файла
-
-1. HTML
-2. CSS
-3. Настройки
-4. Данные
-5. JavaScript
-
-----------------------------------------------------------
-Журнал изменений
-
-v2.0
-29.07.2026
-
-✔ Один файл
-✔ Новый интерфейс
-✔ Rioba
-✔ Monin
-✔ Maribell
-✔ 1883
-✔ Автоочистка
-✔ Копирование результата
-✔ Анимация
-
-==========================================================
--->
-
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ViT-Syrup</title>
 
-<title>ViT-Syrup</title>
-
-<style>
-
-/* ======================================================
-                    ОБЩИЕ НАСТРОЙКИ
-====================================================== */
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-
-    background:#1d2330;
-
-    color:white;
-
-    font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-}
-
-/* ======================================================
-                 ОСНОВНОЙ КОНТЕЙНЕР
-
-Если хочется сделать приложение шире,
-менять max-width.
-
-====================================================== */
-
-#app{
-
-    max-width:430px;
-
-    margin:auto;
-
-    padding:18px;
-
-}
-
-/* ======================================================
-                     ЛОГОТИП
-
-Можно менять:
-
-font-size
-margin
-
-====================================================== */
-
-#logo{
-
-    text-align:center;
-
-    font-size:34px;
-
-    font-weight:bold;
-
-    margin:18px 0 22px;
-
-}
-
-/* ======================================================
-                     КАРТОЧКИ
-
-Используются для:
-
-Фирма
-Тара
-Помпа
-
-====================================================== */
-
-.selector{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    background:#2b3447;
-
-    border-radius:18px;
-
-    padding:14px;
-
-    margin-bottom:14px;
-
-}
-
-/* ======================================================
-                    КНОПКИ ◀ ▶
-
-Если хочется увеличить стрелки —
-менять width и height.
-
-====================================================== */
-
-.arrow{
-
-    width:52px;
-
-    height:52px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:#3b4961;
-
-    color:white;
-
-    font-size:22px;
-
-    cursor:pointer;
-
-    transition:.15s;
-
-}
-
-.arrow:active{
-
-    transform:scale(.94);
-
-}
-
-/* ======================================================
-                    ТЕКСТ В КАРТОЧКАХ
-
-====================================================== */
-
-.selector-name{
-
-    flex:1;
-
-    text-align:center;
-
-    font-size:20px;
-
-    font-weight:bold;
-
-}
-
-/* ======================================================
-                    ПРИМЕЧАНИЕ
-
-====================================================== */
-
-#note{
-
-    text-align:center;
-
-    color:#8ec3ff;
-
-    min-height:24px;
-
-    margin:12px 0 22px;
-
-    font-size:20px;
-
-}
-
-/* ======================================================
-                    ЗАГОЛОВОК ПОЛЯ
-
-====================================================== */
-
-.label{
-
-    color:#9db3d3;
-
-    margin-bottom:8px;
-
-    font-size:16px;
-
-}
-
-/* ======================================================
-                    ПОЛЕ ВВОДА
-
-Менять можно:
-
-height
-font-size
-
-====================================================== */
-
-#weight{
-
-    width:100%;
-
-    height:64px;
-
-    border:none;
-
-    border-radius:16px;
-
-    background:#2b3447;
-
-    color:white;
-
-    text-align:center;
-
-    font-size:34px;
-
-    margin-bottom:22px;
-
-}
-
-#weight::placeholder{
-
-    color:#7d8ca6;
-
-}
-
-/* ======================================================
-                    РЕЗУЛЬТАТ
-
-====================================================== */
-
-#resultRow{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:10px;
-
-}
-
-#result{
-
-    font-size:64px;
-
-    font-weight:bold;
-
-    color:#6cb3ff;
-
-    cursor:pointer;
-
-    user-select:none;
-
-    transition:.25s;
-
-}
-
-/* ======================================================
-               АНИМАЦИЯ КОПИРОВАНИЯ
-
-====================================================== */
-
-.resultCopied{
-
-    color:#35d26d !important;
-
-    transform:scale(1.06);
-
-}
-
-#check{
-
-    font-size:24px;
-
-    color:#35d26d;
-
-    opacity:0;
-
-    transition:.25s;
-
-}
-
-.showCheck{
-
-    opacity:1;
-
-}
-
-</style>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<div id="app">
+<div class="container">
 
-<div id="logo">
+    <header>
 
-🧋 ViT-Syrup
+        <h1>🧋 ViT-Syrup</h1>
+
+        <button id="settingsBtn">
+            ⚙️
+        </button>
+
+    </header>
+
+
+    <!-- ФИРМА -->
+
+    <div class="card">
+
+        <div class="label">
+            Фирма
+        </div>
+
+        <div class="selector">
+
+            <button id="brandPrev">◀</button>
+
+            <div id="brandName">
+                Monin
+            </div>
+
+            <button id="brandNext">▶</button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ТАРА -->
+
+    <div class="card" id="materialCard">
+
+        <div class="label">
+            Тип тары
+        </div>
+
+        <div class="selector">
+
+            <button id="materialPrev">◀</button>
+
+            <div id="materialName">
+                Стекло
+            </div>
+
+            <button id="materialNext">▶</button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ОБЪЕМ -->
+
+    <div class="card" id="volumeCard">
+
+        <div class="label">
+            Объем
+        </div>
+
+        <div class="selector">
+
+            <button id="volumePrev">◀</button>
+
+            <div id="volumeName">
+                1 л
+            </div>
+
+            <button id="volumeNext">▶</button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ПОМПА -->
+
+    <div class="card">
+
+        <div class="label">
+            Помпа
+        </div>
+
+        <div class="selector">
+
+            <button id="pumpPrev">◀</button>
+
+            <div id="pumpName">
+                Без помпы
+            </div>
+
+            <button id="pumpNext">▶</button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ПРИМЕЧАНИЕ -->
+
+    <div class="card">
+
+        <div class="label">
+            Примечание
+        </div>
+
+        <div id="note">
+            —
+        </div>
+
+    </div>
+
+
+
+    <!-- ВВОД -->
+
+    <div class="card">
+
+        <div class="label">
+            Вес (л)
+        </div>
+
+     <input
+    id="weight"
+    type="text"
+    inputmode="decimal"
+    autocomplete="off"
+    spellcheck="false"
+    placeholder="Например 1.268">
+    
+
+    </div>
+
+
+
+    <!-- РЕЗУЛЬТАТ -->
+
+    <div class="card resultCard">
+
+        <div class="label">
+            Результат
+        </div>
+
+        <div id="result">
+            0.000
+        </div>
+
+    </div>
+
+
+
+    <!-- КНОПКА -->
+
+    <button id="copyBtn">
+
+        📋 КОПИРОВАТЬ
+
+    </button>
 
 </div>
 
-<!-- ===================================================
-                     ФИРМА
-=================================================== -->
 
-<div class="selector">
 
-<button
-id="companyPrev"
-class="arrow">
+<script src="data.js"></script>
+<script src="app.js"></script>
 
-◀
-
-</button>
-
-<div
-id="companyName"
-class="selector-name">
-
-Rioba
-
-</div>
-
-<button
-id="companyNext"
-class="arrow">
-
-▶
-
-</button>
-
-</div>
-
-<!-- ===================================================
-                     ТАРА
-=================================================== -->
-
-<div class="selector">
-
-<button
-id="bottlePrev"
-class="arrow">
-
-◀
-
-</button>
-
-<div
-id="bottleName"
-class="selector-name">
-
-0.7 л
-
-</div>
-
-<button
-id="bottleNext"
-class="arrow">
-
-▶
-
-</button>
-
-</div>
-
-<!-- ===================================================
-                     ПОМПА
-=================================================== -->
-
-<div class="selector">
-
-<button
-id="pumpPrev"
-class="arrow">
-
-◀
-
-</button>
-
-<div
-id="pumpName"
-class="selector-name">
-
-Без помпы
-
-</div>
-
-<button
-id="pumpNext"
-class="arrow">
-
-▶
-
-</button>
-
-</div>
-
-<div id="note"></div>
-
-<div class="label">
-
-Вес (гр)
-
-</div>
-
-<input
-id="weight"
-type="number"
-inputmode="decimal"
-placeholder="Введите вес">
-
-<div class="label">
-
-Результат
-
-</div>
-
-<div id="resultRow">
-
-<div id="result">
-
-0.000
-
-</div>
-
-<div id="check">
-
-✔
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ===================================================
-     СЛЕДУЮЩАЯ ЧАСТЬ
-
-1. Настройки
-2. Данные бутылок
-3. Данные помп
-
-=================================================== -->
-<script>
-
-/* ==========================================================
-                     НАСТРОЙКИ
-
-Менять только здесь.
-
-multiplier
-— коэффициент пересчёта
-
-pumpWeight
-— вес одной помпы
-
-decimals
-— количество знаков после запятой
-
-========================================================== */
-
-const SETTINGS={
-
-    multiplier:0.77,
-
-    pumpWeight:35,
-
-    decimals:3
-
-};
-
-
-/* ==========================================================
-                     ДАННЫЕ БУТЫЛОК
-
-Если изменятся веса бутылок —
-менять только здесь.
-
-tare
-— вес пустой бутылки
-
-volume
-— объём
-
-========================================================== */
-
-const DATA=[
-
-{
-
-company:"Rioba",
-
-note:"",
-
-bottles:[
-
-{
-
-name:"Стекло 0.7 л",
-
-volume:0.7,
-
-tare:498
-
-}
-
-]
-
-},
-
-{
-
-company:"Monin",
-
-note:"",
-
-bottles:[
-
-{
-
-name:"Стекло 1 л",
-
-volume:1,
-
-tare:532
-
-},
-
-{
-
-name:"Стекло 0.7 л",
-
-volume:0.7,
-
-tare:464
-
-},
-
-{
-
-name:"Пластик 1 л",
-
-volume:1,
-
-tare:75
-
-}
-
-]
-
-},
-
-{
-
-company:"Maribell",
-
-note:"Все сиропы с помпой",
-
-bottles:[
-
-{
-
-name:"Стекло 0.7 л",
-
-volume:0.7,
-
-tare:454
-
-}
-
-]
-
-},
-
-{
-
-company:"1883",
-
-note:"Можно без помпы",
-
-bottles:[
-
-{
-
-name:"Стекло 1 л",
-
-volume:1,
-
-tare:463
-
-}
-
-]
-
-}
-
-];
-
-
-/* ==========================================================
-                     ПОМПЫ
-
-Без помпы
-
-Помпа 1883
-
-========================================================== */
-
-const PUMPS=[
-
-{
-
-name:"Без помпы",
-
-weight:0
-
-},
-
-{
-
-name:"Помпа 1883",
-
-weight:SETTINGS.pumpWeight
-
-}
-
-];
-
-
-/* ==========================================================
-                  СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-
-Запоминает,
-что выбрал пользователь.
-
-========================================================== */
-
-let companyIndex=0;
-
-let bottleIndex=0;
-
-let pumpIndex=0;
-
-</script>
-
-<script>
-
-/* ==========================================================
-                    ПОИСК ЭЛЕМЕНТОВ
-========================================================== */
-
-const companyName=document.getElementById("companyName");
-const bottleName=document.getElementById("bottleName");
-const pumpName=document.getElementById("pumpName");
-
-const note=document.getElementById("note");
-
-const weight=document.getElementById("weight");
-
-const result=document.getElementById("result");
-
-const check=document.getElementById("check");
-
-
-/* ==========================================================
-                  ТЕКУЩИЕ ОБЪЕКТЫ
-
-Чтобы не писать длинные строки.
-
-========================================================== */
-
-function currentCompany(){
-
-    return DATA[companyIndex];
-
-}
-
-function currentBottle(){
-
-    return DATA[companyIndex].bottles[bottleIndex];
-
-}
-
-function currentPump(){
-
-    return PUMPS[pumpIndex];
-
-}
-
-
-/* ==========================================================
-                 ОБНОВЛЕНИЕ ЭКРАНА
-
-Вызывается после любого изменения.
-
-========================================================== */
-
-function updateScreen(){
-
-    companyName.textContent=currentCompany().company;
-
-    bottleName.textContent=currentBottle().name;
-
-    pumpName.textContent=currentPump().name;
-
-    note.textContent=currentCompany().note;
-
-    calculate();
-
-}
-
-
-/* ==========================================================
-                 СТРЕЛКИ ФИРМЫ
-
-При смене фирмы автоматически
-переходим на первую бутылку.
-
-========================================================== */
-
-companyPrev.onclick=function(){
-
-    companyIndex--;
-
-    if(companyIndex<0){
-
-        companyIndex=DATA.length-1;
-
-    }
-
-    bottleIndex=0;
-
-    updateScreen();
-
-};
-
-
-companyNext.onclick=function(){
-
-    companyIndex++;
-
-    if(companyIndex>=DATA.length){
-
-        companyIndex=0;
-
-    }
-
-    bottleIndex=0;
-
-    updateScreen();
-
-};
-
-
-/* ==========================================================
-                 СТРЕЛКИ ТАРЫ
-========================================================== */
-
-bottlePrev.onclick=function(){
-
-    bottleIndex--;
-
-    if(bottleIndex<0){
-
-        bottleIndex=currentCompany().bottles.length-1;
-
-    }
-
-    updateScreen();
-
-};
-
-
-bottleNext.onclick=function(){
-
-    bottleIndex++;
-
-    if(bottleIndex>=currentCompany().bottles.length){
-
-        bottleIndex=0;
-
-    }
-
-    updateScreen();
-
-};
-
-
-/* ==========================================================
-                 СТРЕЛКИ ПОМПЫ
-========================================================== */
-
-pumpPrev.onclick=function(){
-
-    pumpIndex--;
-
-    if(pumpIndex<0){
-
-        pumpIndex=PUMPS.length-1;
-
-    }
-
-    updateScreen();
-
-};
-
-
-pumpNext.onclick=function(){
-
-    pumpIndex++;
-
-    if(pumpIndex>=PUMPS.length){
-
-        pumpIndex=0;
-
-    }
-
-    updateScreen();
-
-};
-
-</script>
-
-<script>
-
-/* ==========================================================
-                    ФОРМУЛА РАСЧЁТА
-
-Формула:
-
-(Вес - Тара - Помпа)
-× Коэффициент
-÷ (1000 × Объём)
-
-========================================================== */
-
-function calculate(){
-
-    const value=parseFloat(weight.value);
-
-    if(isNaN(value)){
-
-        result.textContent="0.000";
-
-        return;
-
-    }
-
-    const bottle=currentBottle();
-
-    const pump=currentPump();
-
-    const syrup=
-
-        (value-bottle.tare-pump.weight)
-
-        *SETTINGS.multiplier
-
-        /(1000*bottle.volume);
-
-    result.textContent=syrup.toFixed(SETTINGS.decimals);
-
-}
-
-
-/* ==========================================================
-                АВТООЧИСТКА ПОЛЯ
-
-При нажатии удаляет старое значение.
-
-========================================================== */
-
-weight.addEventListener("focus",function(){
-
-    if(weight.value!=""){
-
-        weight.value="";
-
-    }
-
-});
-
-
-/* ==========================================================
-              АВТОМАТИЧЕСКИЙ ПЕРЕСЧЁТ
-
-========================================================== */
-
-weight.addEventListener("input",calculate);
-
-
-/* ==========================================================
-                 КОПИРОВАНИЕ
-
-========================================================== */
-
-result.addEventListener("click",async function(){
-
-    try{
-
-        await navigator.clipboard.writeText(result.textContent);
-
-    }catch(e){
-
-        return;
-
-    }
-
-    result.classList.add("resultCopied");
-
-    check.classList.add("showCheck");
-
-    setTimeout(function(){
-
-        result.classList.remove("resultCopied");
-
-        check.classList.remove("showCheck");
-
-    },500);
-
-});
-
-
-/* ==========================================================
-                 ПЕРВЫЙ ЗАПУСК
-
-========================================================== */
-
-updateScreen();
-
-</script>
-  
 </body>
 
 </html>
